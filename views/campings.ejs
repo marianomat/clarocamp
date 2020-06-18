@@ -1,0 +1,31 @@
+<%- include ("partials/header.ejs") %>
+
+<div class="container">
+    <div class="jumbotron mt-4">
+        <h1 class="display-4">ClaroCamps</h1>
+        <p class="lead">Elegi el camping del mejor balneario de Argentina</p>
+        <a class="btn btn-primary btn-lg" href="/campings/new" role="button">Agregar Camping</a>
+    </div>
+
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <% campings.forEach((camp) => { %>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card" style="width: 90%;">
+                <img src="<%= camp.imagen %>" class="card-img-top" style="height: 10rem;" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"><%= camp.nombre %></h5>
+                </div>
+            </div>
+        </div>
+        <%})%>
+    </div>
+</div>
+
+
+
+<%- include ("partials/footer.ejs") %>

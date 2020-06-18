@@ -1,0 +1,24 @@
+<%- include ("partials/header.ejs") %>
+
+
+<div class="container">
+    <h1 class="text-center my-5">
+        Añadir camping
+    </h1>
+    <form method="POST" action="/campings">
+        <div class="form-group text-center">
+            <label for="nombre">Nombre camping</label>
+            <input style="width: 50%" type="text" class="form-control mx-auto" id="nombre" name="nombre">
+        </div>
+        <div class="form-group text-center">
+            <label for="imagen">URL Imagen</label>
+            <input style="width: 50%" type="text" class="form-control mx-auto" id="imagen" name="imagen">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block m-auto" style="width: 50%">Agregar</button>
+    </form>
+    <a href="/campings" class="btn btn-lg btn-info">VOLVER</a>
+</div>
+
+
+
+<%- include ("partials/footer.ejs") %>
