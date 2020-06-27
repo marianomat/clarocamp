@@ -1,28 +1,28 @@
 const express = require("express"),
 	  bodyParser = require("body-parser"),
+	  mongoose = require('mongoose'),
 	  app = express();
+
+mongoose.connect('mongodb://localhost:27017/clarocamp', {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-let campings = [
-	{nombre: "Luz y fuerza Claromeco", imagen: "https://www.lu24.com.ar/wp-content/uploads/2020/01/luzyfuerza.jpg"},
-	{nombre: "ACA Claromeco", imagen: "https://www.claromecoalquileres.com/images/claromeco/aca/campingACA-ClaromecoAlquileres-2.jpg"},
-	{nombre: "Pehuen Claromeco", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS7VG_QZd2ZYmHAu9lUWc32TS5k0_wAFDkbwjqvQVHLvgheMGNS&usqp=CAU"},
-	{nombre: "Luz y fuerza Claromeco", imagen: "https://www.lu24.com.ar/wp-content/uploads/2020/01/luzyfuerza.jpg"},
-	{nombre: "ACA Claromeco", imagen: "https://www.claromecoalquileres.com/images/claromeco/aca/campingACA-ClaromecoAlquileres-2.jpg"},
-	{nombre: "Pehuen Claromeco", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS7VG_QZd2ZYmHAu9lUWc32TS5k0_wAFDkbwjqvQVHLvgheMGNS&usqp=CAU"},
-	{nombre: "Luz y fuerza Claromeco", imagen: "https://www.lu24.com.ar/wp-content/uploads/2020/01/luzyfuerza.jpg"},
-	{nombre: "ACA Claromeco", imagen: "https://www.claromecoalquileres.com/images/claromeco/aca/campingACA-ClaromecoAlquileres-2.jpg"},
-	{nombre: "Pehuen Claromeco", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS7VG_QZd2ZYmHAu9lUWc32TS5k0_wAFDkbwjqvQVHLvgheMGNS&usqp=CAU"}
-]
-		
+const Camping = mongoose.model('Camping', { nombre: String, imagen: String });
+
 app.get("/", (req,res) => {
 	res.render("home")
 });
 
 app.get("/campings", (req,res) => {
-	res.render("campings", {campings: campings})
+	
+	Camping.find({}, (error, todosCamping) => {
+		if(error) {
+			console.log(error)
+		} else {
+			res.render("campings", {campings: todosCamping})
+		}
+	})
 })
 
 app.get("/campings/new", (req,res) => {
@@ -30,11 +30,19 @@ app.get("/campings/new", (req,res) => {
 })
 
 app.post("/campings", (req,res) => {
+	
 	let nombre = req.body.nombre;
 	let imagen = req.body.imagen;
 	let nuevoCamping = {nombre: nombre, imagen: imagen}
-	campings.push(nuevoCamping)
-	res.redirect("/campings")
+	
+	Camping.create(nuevoCamping, (error, nuevoCamping) => {
+		if(error) {
+			console.log(error)
+		} else {
+			console.log("Camping añadido!!!")
+			res.redirect("/campings")
+		}
+	})
 })
 
 
