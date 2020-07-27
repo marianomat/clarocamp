@@ -1,6 +1,9 @@
 const express = require("express"),
 	  bodyParser = require("body-parser"),
 	  mongoose = require('mongoose'),
+	  Camping = require("./models/campings"),
+	  Comentario = require("./models/comentarios"),	  
+	  seedDB = require("./seeds"),
 	  app = express();
 
 mongoose.connect('mongodb://localhost:27017/clarocamp', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -8,11 +11,12 @@ mongoose.connect('mongodb://localhost:27017/clarocamp', {useNewUrlParser: true, 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-const Camping = mongoose.model('Camping', { nombre: String, imagen: String });
+//seedDB();
+
 
 app.get("/", (req,res) => {
 	res.render("home")
-});
+});	
 
 app.get("/campings", (req,res) => {
 	
@@ -20,14 +24,26 @@ app.get("/campings", (req,res) => {
 		if(error) {
 			console.log(error)
 		} else {
-			res.render("campings", {campings: todosCamping})
+			res.render("./campings/index", {campings: todosCamping})
 		}
 	})
 })
 
 app.get("/campings/new", (req,res) => {
-	res.render("form")
+	res.render("./campings/new")
 })
+
+app.get("/campings/:id"), (req,res) => {
+	Camping.findById(req.params.id, (error, campingEncontrado) => {
+		if(error) {
+			console.log(error)
+		} else {
+			//RENDER BLOG
+			res.render("./campings/show", {campings: campingEncontrado});
+		}
+	})	
+}
+
 
 app.post("/campings", (req,res) => {
 	
